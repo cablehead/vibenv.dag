@@ -5,7 +5,7 @@ container |
   from rust:slim |
   with-exec -- "rustup" "component" "add" "rustfmt" "clippy" |
   with-exec -- "apt" "update" |
-  with-exec -- "apt" "install" "-y" "curl" "git" "golang" "unzip" "neovim" "moreutils" "xz-utils" |
+  with-exec -- "apt" "install" "-y" "curl" "git" "golang" "unzip" "neovim" "moreutils" "xz-utils" "file" |
   with-exec -- "sh" "-c" "curl -fsSL https://deno.land/install.sh | sh -s -- -y" |
   with-exec -- "sh" "-c" "curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh" |
   with-env-variable "_EXPERIMENTAL_DAGGER_RUNNER_HOST" "unix:///run/dagger/engine.sock" |
