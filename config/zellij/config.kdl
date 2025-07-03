@@ -236,9 +236,9 @@ plugins {
     status-bar location="zellij:status-bar"
     strider location="zellij:strider"
     tab-bar location="zellij:tab-bar"
-    welcome-screen location="zellij:session-manager" {
-        welcome_screen true
-    }
+    // welcome-screen location="zellij:session-manager" {
+    //     welcome_screen true
+    // }
 }
 
 // Plugins to load in the background when a new session starts
@@ -267,7 +267,7 @@ default_mode "locked"
 // Choose the path to the default shell that zellij will use for opening new panes
 // Default: $SHELL
 // 
-default_shell "nu"
+default_shell "/usr/local/bin/nu"
  
 // Choose the path to override cwd that zellij will use for opening new panes
 // 
@@ -286,7 +286,7 @@ default_shell "nu"
 // The folder in which Zellij will look for themes
 // (Requires restart)
 // 
-theme_dir "/Users/andy/git/dot/zellij/themes"
+// theme_dir "/Users/andy/git/dot/zellij/themes"
  
 // Toggle enabling the mouse mode.
 // On certain configurations, or terminals this could
@@ -437,4 +437,4 @@ show_startup_tips false
 // Whether to show release notes on first version run
 // Default: true
 // 
-// show_release_notes false
+show_release_notes false

@@ -31,6 +31,6 @@ container |
 
   # zellij
   with-exec -- "eget" "zellij-org/zellij" |
-  with-mounted-directory /root/config/zellij ./zellij |
+  with-mounted-directory /root/.config/zellij ./zellij |
 
   with-workdir "/root"
