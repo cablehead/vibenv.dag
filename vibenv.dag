@@ -24,14 +24,19 @@ container |
   with-exec -- "eget" "nushell/nushell" "--asset" "musl" "--all" |
   with-exec -- "eget" "BurntSushi/ripgrep" |
 
+  # zellij
+  with-exec -- "eget" "zellij-org/zellij" |
+
+  # session
+  with-mounted-cache /root/session session |
+
+  # personal config
+  with-mounted-directory /root/.config ./config |
+
+  # xs: install after personal config to avoid overwriting ~/.config/nushell/scripts/xs.nu
   with-exec -- "eget" "cablehead/xs" "--pre-release" "--asset" "linux-musl" |
   with-exec -- "sh" "-c" "yes | xs nu --install" |
   with-env-variable "XS_ADDR" "10.0.0.4:3001" |
   with-env-variable "XS_CONTEXT" "03e6jtm3bk78iut863xd8tjvb" |
 
-  # zellij
-  with-exec -- "eget" "zellij-org/zellij" |
-  with-mounted-directory /root/.config ./config |
-  with-mounted-cache /root/session session |
-
-  with-workdir "/root"
+  with-workdir "/root/session"
