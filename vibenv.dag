@@ -7,7 +7,7 @@ container |
   with-exec -- "sh" "-c" "echo '' >> /root/.bashrc && echo 'export PATH=/usr/local/cargo/bin:\$PATH' >> /root/.bashrc" |
 
   with-exec -- "apt" "update" |
-  with-exec -- "apt" "install" "-y" "curl" "git" "golang" "unzip" "neovim" "moreutils" "xz-utils" "file" "jq" "iputils-ping" "procps" |
+  with-exec -- "apt" "install" "-y" "curl" "git" "golang" "unzip" "neovim" "moreutils" "xz-utils" "file" "jq" "iputils-ping" "procps" "silversearcher-ag" |
 
   with-exec -- "sh" "-c" "curl -fsSL https://deno.land/install.sh | sh -s -- -y" |
 
@@ -23,6 +23,10 @@ container |
   with-env-variable "EGET_BIN" "/usr/local/bin" |
   with-exec -- "eget" "nushell/nushell" "--asset" "musl" "--all" |
   with-exec -- "eget" "BurntSushi/ripgrep" |
+
+  # gh
+  # todo, preserve config / auth paths
+  with-exec -- "eget" "cli/cli" "--asset" "tar" |
 
   # zellij
   with-exec -- "eget" "zellij-org/zellij" |
