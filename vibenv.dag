@@ -31,9 +31,6 @@ container |
   # zellij
   with-exec -- "eget" "zellij-org/zellij" |
 
-  # session
-  with-mounted-cache /root/session session |
-
   # personal config
   with-mounted-directory /root/.config ./config |
 
@@ -43,4 +40,6 @@ container |
   with-env-variable "XS_ADDR" "10.0.0.4:3001" |
   with-env-variable "XS_CONTEXT" "03e6jtm3bk78iut863xd8tjvb" |
 
+  # session
+  with-mounted-cache /root/session session |
   with-workdir "/root/session"
