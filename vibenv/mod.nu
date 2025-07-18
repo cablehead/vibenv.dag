@@ -5,7 +5,7 @@ export def "create launcher" [] {
   let dagger_cmd = r#'container |
   from debian:stable-slim |
   with-exec -- "apt" "update" |
-  with-exec -- "apt" "install" "-y" "curl" "ca-certificates" |
+  with-exec -- "apt" "install" "-y" "curl" "ca-certificates" "docker.io" |
   with-exec -- "sh" "-c" "curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh" |
 
   # Install eget for downloading binaries
@@ -24,7 +24,7 @@ export def "create launcher" [] {
   with-exec -- "rm" "-rf" "/var/lib/apt/lists/*" |
 
   # Set environment
-  with-env-variable "_EXPERIMENTAL_DAGGER_RUNNER_HOST" "unix:///var/run/docker.sock" |
+  with-env-variable "_EXPERIMENTAL_DAGGER_RUNNER_HOST" "unix:///run/dagger/engine.sock" |
   with-workdir "/workspace/vibenv" |
 
   publish "localhost:5000/vibenv-launcher:latest"'#
@@ -45,6 +45,7 @@ export def launch [name: string] {
 
   (docker run -d --name $container_name
     -v /var/run/docker.sock:/var/run/docker.sock
+    -v /run/dagger:/run/dagger
     localhost:5000/vibenv-launcher:latest
     nu -c $"use vibenv; vibenv remote-launch ($name)")
 
