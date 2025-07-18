@@ -85,3 +85,39 @@ docker pull localhost:5000/t-1
 
 This makes images available to the host Docker daemon for running persistent
 containers.
+
+```mermaid
+graph TB
+    subgraph Local[Local Laptop]
+        DC[Docker Client]
+        SSH[SSH Client]
+    end
+
+    subgraph AWS[AWS]
+        SSM[SSM Agent]
+    end
+
+    subgraph Remote[Remote EC2 Instance]
+        DE[Docker Engine]
+
+        subgraph Containers[Containers]
+            subgraph SharedNetwork[Shared Network]
+                DG[Dagger Engine]
+                REG[Registry]
+            end
+            VIB[vibenv-xs-expose-iroh]
+        end
+
+        SOCK[docker.sock]
+    end
+
+    DC --> SSH
+    SSH --> SSM
+    SSM --> DE
+
+    DE --> SOCK
+    DG --> SOCK
+    VIB --> SOCK
+
+    REG -.-> DG
+```
