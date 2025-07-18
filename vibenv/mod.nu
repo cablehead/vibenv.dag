@@ -16,8 +16,8 @@ export def "create launcher" [] {
   with-env-variable "EGET_BIN" "/usr/local/bin" |
   with-exec -- "eget" "nushell/nushell" "--asset" "musl" "--all" |
 
-  # Mount this git repo
-  with-mounted-directory "/workspace/vibenv" "https://github.com/cablehead/vibenv.dag.git" |
+  # Copy this git repo into container
+  with-directory "/workspace/vibenv" "." |
 
   # Cleanup
   with-exec -- "apt" "clean" |
@@ -46,7 +46,7 @@ export def launch [name: string] {
   (docker run -d --name $container_name
     -v /var/run/docker.sock:/var/run/docker.sock
     localhost:5000/vibenv-launcher:latest
-    nu -c $"vibenv launch ($name)")
+    nu -c $"use vibenv; vibenv remote-launch ($name)")
 
   print $"✅ Session started. Attach with: docker attach ($container_name)"
 }
