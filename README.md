@@ -140,12 +140,18 @@ use vibenv
 vibenv launch my-task
 ```
 
-This creates a persistent Docker container named `vibenv-my-task` that survives connection drops.
+This creates a persistent Docker container named `vibenv-my-task` with a detached session that survives connection drops.
 
 ### Attach to sessions
 
+```nushell
+use vibenv
+vibenv attach my-task
+```
+
+Or directly with Docker:
 ```bash
-docker attach vibenv-my-task
+docker exec -it vibenv-my-task dtach -a /tmp/vibenv.sock
 ```
 
 ### Direct execution (legacy)

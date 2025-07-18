@@ -5,7 +5,7 @@ export def "create launcher" [] {
   let dagger_cmd = r#'container |
   from debian:stable-slim |
   with-exec -- "apt" "update" |
-  with-exec -- "apt" "install" "-y" "curl" "ca-certificates" "docker.io" |
+  with-exec -- "apt" "install" "-y" "curl" "ca-certificates" "docker.io" "dtach" |
   with-exec -- "sh" "-c" "curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh" |
 
   # Install eget for downloading binaries
@@ -43,14 +43,19 @@ export def launch [name: string] {
 
   print $"Launching persistent session: ($container_name)"
 
-  (docker run -dit --name $container_name
+  (docker run -d --init --name $container_name
     -v /var/run/docker.sock:/var/run/docker.sock
     -v /run/dagger:/run/dagger
     localhost:5000/vibenv-launcher:latest
-    nu -c $"use vibenv; vibenv remote-launch ($name)")
+    dtach -N /tmp/vibenv.sock nu -c $"use vibenv; vibenv remote-launch ($name)")
 
-  print $"✅ Session started. Attaching..."
-  docker attach $container_name
+  print $"✅ Session started. Use 'vibenv attach ($name)' to connect"
+}
+
+# Attach to a persistent session
+export def attach [name: string] {
+  let container_name = $"vibenv-($name)"
+  docker exec -it $container_name dtach -a /tmp/vibenv.sock
 }
 
 # Direct dagger execution (original behavior)
