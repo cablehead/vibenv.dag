@@ -49,7 +49,8 @@ export def launch [name: string] {
     localhost:5000/vibenv-launcher:latest
     nu -c $"use vibenv; vibenv remote-launch ($name)")
 
-  print $"✅ Session started. Attach with: docker attach ($container_name)"
+  print $"✅ Session started. Attaching..."
+  docker attach $container_name
 }
 
 # Direct dagger execution (original behavior)
