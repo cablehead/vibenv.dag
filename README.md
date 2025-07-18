@@ -9,8 +9,44 @@
 - dagger engine: with the docker unix socket mounted: so we can reach the
   registry
 - registry: localhost: 5000
-- vibenv-xs-expose-iroh: this is running our dagger client: also has unix socket
+- vibenv-task-name: this is running our dagger client: also has unix socket
   mounted to reach the dagger engine: we attach and dettach to this
+
+```mermaid
+graph TB
+    subgraph Local[Local Laptop]
+        DC[Docker Client]
+        SSH[SSH Client]
+    end
+
+    subgraph AWS[AWS]
+        SSM[SSM Agent]
+    end
+
+    subgraph Remote[Remote EC2 Instance]
+        DE[Docker Engine]
+
+        subgraph Containers[Containers]
+            subgraph SharedNetwork[Shared Network]
+                DG[Dagger Engine]
+                REG[Registry]
+            end
+            VIB[vibenv-xs-task-name]
+        end
+
+        SOCK[docker.sock]
+    end
+
+    DC --> SSH
+    SSH --> SSM
+    SSM --> DE
+
+    DE --> SOCK
+    DG --> SOCK
+    VIB --> SOCK
+
+    REG -.-> DG
+```
 
 ## Setup
 
@@ -85,39 +121,3 @@ docker pull localhost:5000/t-1
 
 This makes images available to the host Docker daemon for running persistent
 containers.
-
-```mermaid
-graph TB
-    subgraph Local[Local Laptop]
-        DC[Docker Client]
-        SSH[SSH Client]
-    end
-
-    subgraph AWS[AWS]
-        SSM[SSM Agent]
-    end
-
-    subgraph Remote[Remote EC2 Instance]
-        DE[Docker Engine]
-
-        subgraph Containers[Containers]
-            subgraph SharedNetwork[Shared Network]
-                DG[Dagger Engine]
-                REG[Registry]
-            end
-            VIB[vibenv-xs-expose-iroh]
-        end
-
-        SOCK[docker.sock]
-    end
-
-    DC --> SSH
-    SSH --> SSM
-    SSM --> DE
-
-    DE --> SOCK
-    DG --> SOCK
-    VIB --> SOCK
-
-    REG -.-> DG
-```
