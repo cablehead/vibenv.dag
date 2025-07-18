@@ -1,7 +1,7 @@
 #!/usr/bin/env dagger
 # dagger-base.dag
 container |
-  from debian:bookworm-slim |
+  from debian:stable-slim |
   with-exec -- "apt" "update" |
   with-exec -- "apt" "install" "-y" "curl" "ca-certificates" |
   with-exec -- "sh" "-c" "curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh" |
