@@ -1,0 +1,26 @@
+#!/usr/bin/env dagger
+# dagger-base.dag
+container |
+  from debian:bookworm-slim |
+  with-exec -- "apt" "update" |
+  with-exec -- "apt" "install" "-y" "curl" "ca-certificates" |
+  with-exec -- "sh" "-c" "curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh" |
+  
+  # Install eget for downloading binaries  
+  with-workdir "/usr/local/bin" |
+  with-exec -- "sh" "-c" "curl https://zyedidia.github.io/eget.sh | sh" |
+  
+  # Install nushell
+  with-env-variable "EGET_BIN" "/usr/local/bin" |
+  with-exec -- "eget" "nushell/nushell" "--asset" "musl" "--all" |
+  
+  # Mount this git repo
+  with-mounted-directory "/workspace/vibenv" "https://github.com/cablehead/vibenv.dag.git" |
+  
+  # Cleanup
+  with-exec -- "apt" "clean" |
+  with-exec -- "rm" "-rf" "/var/lib/apt/lists/*" |
+  
+  # Set environment
+  with-env-variable "_EXPERIMENTAL_DAGGER_RUNNER_HOST" "unix:///var/run/docker.sock" |
+  with-workdir "/workspace"
