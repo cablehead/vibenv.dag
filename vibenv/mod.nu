@@ -43,7 +43,7 @@ export def launch [name: string] {
 
   print $"Launching persistent session: ($container_name)"
 
-  (docker run -d --name $container_name
+  (docker run -dt --name $container_name
     -v /var/run/docker.sock:/var/run/docker.sock
     -v /run/dagger:/run/dagger
     localhost:5000/vibenv-launcher:latest
