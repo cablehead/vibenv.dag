@@ -49,7 +49,9 @@ export def launch [name: string] {
     localhost:5000/vibenv-launcher:latest
     dtach -N /tmp/vibenv.sock nu -c $"use vibenv; vibenv remote-launch ($name)")
 
-  print $"✅ Session started. Use 'vibenv attach ($name)' to connect"
+  print $"✅ Session started. Attaching..."
+  sleep 1sec  # Give the session a moment to start
+  docker exec -it $container_name dtach -a /tmp/vibenv.sock
 }
 
 # Attach to a persistent session
