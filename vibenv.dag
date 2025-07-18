@@ -38,8 +38,4 @@ container |
   with-exec -- "eget" "cablehead/xs" "--pre-release" "--asset" "linux-musl" |
   with-exec -- "sh" "-c" "yes | xs nu --install" |
   with-env-variable "XS_ADDR" "10.0.0.4:3001" |
-  with-env-variable "XS_CONTEXT" "03e6jtm3bk78iut863xd8tjvb" |
-
-  # session
-  with-mounted-cache /root/session session |
-  with-workdir "/root/session"
+  with-env-variable "XS_CONTEXT" "03e6jtm3bk78iut863xd8tjvb"
