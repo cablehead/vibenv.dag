@@ -121,3 +121,38 @@ docker pull localhost:5000/t-1
 
 This makes images available to the host Docker daemon for running persistent
 containers.
+
+## Usage
+
+### Create the launcher (one-time setup)
+
+```nushell
+use vibenv
+vibenv create launcher
+```
+
+This builds and publishes the vibenv-launcher container to the registry.
+
+### Launch persistent sessions
+
+```nushell
+use vibenv
+vibenv launch my-task
+```
+
+This creates a persistent Docker container named `vibenv-my-task` that survives connection drops.
+
+### Attach to sessions
+
+```bash
+docker attach vibenv-my-task
+```
+
+### Direct execution (legacy)
+
+For the old behavior of direct dagger execution:
+
+```nushell
+use vibenv
+vibenv remote-launch my-task
+```

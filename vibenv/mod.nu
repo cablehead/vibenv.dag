@@ -1,4 +1,58 @@
+# Create and publish the vibenv-launcher container
+export def "create launcher" [] {
+  print "Building vibenv-launcher container..."
+
+  let dagger_cmd = r#'container |
+  from debian:stable-slim |
+  with-exec -- "apt" "update" |
+  with-exec -- "apt" "install" "-y" "curl" "ca-certificates" |
+  with-exec -- "sh" "-c" "curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh" |
+
+  # Install eget for downloading binaries
+  with-workdir "/usr/local/bin" |
+  with-exec -- "sh" "-c" "curl https://zyedidia.github.io/eget.sh | sh" |
+
+  # Install nushell
+  with-env-variable "EGET_BIN" "/usr/local/bin" |
+  with-exec -- "eget" "nushell/nushell" "--asset" "musl" "--all" |
+
+  # Mount this git repo
+  with-mounted-directory "/workspace/vibenv" "https://github.com/cablehead/vibenv.dag.git" |
+
+  # Cleanup
+  with-exec -- "apt" "clean" |
+  with-exec -- "rm" "-rf" "/var/lib/apt/lists/*" |
+
+  # Set environment
+  with-env-variable "_EXPERIMENTAL_DAGGER_RUNNER_HOST" "unix:///var/run/docker.sock" |
+  with-workdir "/workspace/vibenv" |
+
+  publish "localhost:5000/vibenv-launcher:latest"'#
+
+  dagger -c $dagger_cmd
+
+  print "Pulling vibenv-launcher from registry to host Docker..."
+  docker pull localhost:5000/vibenv-launcher:latest
+
+  print "✅ vibenv-launcher is ready!"
+}
+
+# Launch a persistent Docker container session
 export def launch [name: string] {
+  let container_name = $"vibenv-($name)"
+
+  print $"Launching persistent session: ($container_name)"
+
+  (docker run -d --name $container_name
+    -v /var/run/docker.sock:/var/run/docker.sock
+    localhost:5000/vibenv-launcher:latest
+    nu -c $"vibenv launch ($name)")
+
+  print $"✅ Session started. Attach with: docker attach ($container_name)"
+}
+
+# Direct dagger execution (original behavior)
+export def "remote-launch" [name: string] {
   cat vibenv.dag
   | str trim
   | append $" | with-mounted-cache /root/session ($name) | with-workdir "/root/session" | terminal --cmd=sh,-c,'stty sane; zellij -s ($name)'"
