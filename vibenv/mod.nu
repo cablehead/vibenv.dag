@@ -43,7 +43,7 @@ export def launch [name: string] {
 
   print $"Launching persistent session: ($container_name)"
 
-  (docker run -d --init --name $container_name
+  (docker run -d --init --rm --name $container_name
     -v /var/run/docker.sock:/var/run/docker.sock
     -v /run/dagger:/run/dagger
     localhost:5000/vibenv-launcher:latest
@@ -57,7 +57,16 @@ export def launch [name: string] {
 # Attach to a persistent session
 export def attach [name: string] {
   let container_name = $"vibenv-($name)"
-  docker exec -it $container_name dtach -a /tmp/vibenv.sock
+  
+  # Check if container exists and is running
+  let container_exists = (docker ps --filter $"name=^($container_name)$" --format "{{.Names}}" | str trim)
+  
+  if ($container_exists == $container_name) {
+    docker exec -it $container_name dtach -a /tmp/vibenv.sock
+  } else {
+    print $"❌ No active session found for '($name)'"
+    print $"Use 'vibenv launch ($name)' to start a new session"
+  }
 }
 
 # Direct dagger execution (original behavior)

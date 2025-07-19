@@ -140,19 +140,23 @@ use vibenv
 vibenv launch my-task
 ```
 
-This creates a persistent Docker container named `vibenv-my-task` with a detached session that survives connection drops.
+This creates an ephemeral Docker container named `vibenv-my-task` that launches a persistent development session. The container automatically removes itself when the session ends, but your work is preserved in dagger cache volumes.
 
-### Attach to sessions
+### Attach to active sessions
 
 ```nushell
 use vibenv
 vibenv attach my-task
 ```
 
+This attaches to a currently running session. If no active session exists, you'll be prompted to launch a new one.
+
 Or directly with Docker:
 ```bash
 docker exec -it vibenv-my-task dtach -a /tmp/vibenv.sock
 ```
+
+**Note**: Containers are ephemeral launchers - persistence comes from dagger cache volumes, not the containers themselves.
 
 ### Direct execution (legacy)
 
