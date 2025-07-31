@@ -1,5 +1,46 @@
 # vibenv
 
+## Definition
+
+A **vibenv** is a throw‑away, cloud‑hosted mini‑workspace that materializes instantly for a specific task, letting humans and AI agents collaborate safely and interactively, then vanish (or be reused) as needed.
+
+## What makes something a vibenv?
+
+* **Ephemeral & disposable:** spun up on demand; discarded or snapshotted when finished.
+* **Hermetic safety zone:** fully isolated from the operator’s laptop and from other tasks.
+* **Human‑agent co‑presence:** operator and AI agents share the same runtime and iterate in real time.
+* **Sub‑second startup:** provisioning targets an “instant” feel (ideally < 5 s).
+* **Task‑centric linking:** each vibenv is created around one discrete task/idea and can be reopened via a shareable link.
+* **Parallelism by default:** multiple vibenvs can run concurrently without interference.
+* **UI‑metaphor friendly:** maps naturally to Trello‑style cards or other kanban nodes.
+
+## Cloud Development Environments (CDEs) – the foundation
+
+> *CDEs are remote, pre‑configured browser workspaces, popularized by Gitpod in the late‑2010s and now mainstream via GitHub Codespaces—so the concept itself isn’t new.*
+
+## Codex Code – a solo‑agent CDE (contrast)
+
+* **What it is:** OpenAI’s *Codex Code* spins up a remote workspace, loads a repo, lets one agent hack for \~30 min, then hands back a diff.
+* **Not collaborative:** the human waits for a batch result; no live co‑editing.
+* **Slow to start:** environment provisioning typically takes 5‑10 minutes.
+* **Not resumable:** once the run finishes, the workspace is torn down—can’t reopen it later.
+
+→ *A **vibenv should** solve those pain points—by being collaborative/live, near‑instant to start, and fully resumable.*
+
+## Rough
+
+Some initial thoughts on the make up of the vm:
+
+the dev environment is a stack of independent, swappable overlays:
+
+1. **base** – a stripped-down OS image
+2. **profile** – your dotfiles + shell helpers; essential cli tools; portable and updatable everywhere
+3. **toolchain** – language/SDK layer (e.g., rustup + cargo) that can be refreshed without touching other layers
+4. **project** – the specific repo’s source and deps
+5. **session** – a throwaway scratch overlay per task, easily forked from any prior session
+
+each layer can evolve on its own, and updates flow downward into any running stack without disturbing the layers above it.
+
 ## Architecture
 
 **Local laptop:** docker client (connected to remote via SSH over SSM)
