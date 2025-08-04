@@ -135,6 +135,7 @@ docker run -d --name registry -p 127.0.0.1:5000:5000 registry:2
 DAGGER_VERSION=$(dagger version | cut -d' ' -f2)
 docker run -d --name dagger-engine-$DAGGER_VERSION \
   --network container:registry \
+  --privileged \
   -v dagger-cache:/var/lib/dagger \
   -v /var/run/dagger:/run/dagger \
   registry.dagger.io/engine:$DAGGER_VERSION
