@@ -2,7 +2,7 @@
 
 ## Definition
 
-A **vibenv** is a throw‑away, cloud‑hosted mini‑workspace that materializes instantly for a specific task, letting humans and AI agents collaborate safely and interactively, then vanish (or be reused) as needed.
+A **vibenv** is a throw‑away, potentially cloud‑hosted, mini‑workspace that materializes instantly for a specific task, letting humans and AI agents collaborate safely and interactively, then vanish (or be reused) as needed.
 
 ## What makes something a vibenv?
 
