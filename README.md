@@ -9,7 +9,7 @@ A **vibenv** is a throw‑away, potentially cloud‑hosted, mini‑workspace tha
 * **Ephemeral & disposable:** spun up on demand; discarded or snapshotted when finished.
 * **Hermetic safety zone:** fully isolated from the operator’s laptop and from other tasks.
 * **Human‑agent co‑presence:** operator and AI agents share the same runtime and iterate in real time.
-* **Sub‑second startup:** provisioning targets an “instant” feel (ideally < 5 s).
+* **Near-instant startup:** provisioning targets an 'instant' feel (ideally < 5 s).
 * **Task‑centric linking:** each vibenv is created around one discrete task/idea and can be reopened via a shareable link.
 * **Parallelism by default:** multiple vibenvs can run concurrently without interference.
 * **UI‑metaphor friendly:** maps naturally to Trello‑style cards or other kanban nodes.
