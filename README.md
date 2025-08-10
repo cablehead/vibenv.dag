@@ -41,7 +41,9 @@ the dev environment is a stack of independent, swappable overlays:
 
 each layer can evolve on its own, and updates flow downward into any running stack without disturbing the layers above it.
 
-## Architecture
+## Architecture sketch
+
+initial setup to try out the workflow
 
 **Local laptop:** docker client (connected to remote via SSH over SSM)
 
